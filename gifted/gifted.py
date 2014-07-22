@@ -1,8 +1,28 @@
-from moviepy.editor import *
+"""
+Usage:
+  gifted.py new <video_name> <gif_name> <start_time> <end_time> [--resize=<factor>] [--directory=DIR]
+  gifted.py new <video_name> <gif_name> <start_time> <end_time> crop <x> <y> [--resize=<factor>] [--directory=DIR]
 
-gif_name = raw_input("Please enter the movie name (current folder): ")
-start_time = raw_input("Please enter the start time (MM:SS:TS): ")
-end_time = raw_input("Please enter the start time (MM:SS:TS): ")
+Options:
+  -h --help     		Show this screen
+  --version     		Show version
+  --resize=<factor>  		Resizing factor [default: 0.3]
+  --directory=DIR  		Directory for input and output [default: /Users/TK/mycode/gifted_io/]
+"""
+
+from docopt import docopt
+from moviepy import editor
+
+if __name__ == '__main__':
+    arguments = docopt(__doc__)
+    print(arguments)
+    
+    video_name = arguments['<video_name>']
+    gif_name = arguments['<gif_name>']
+    start_time = arguments['<start_time>']
+    end_time = arguments['<end_time>']
+    resize_factor = float(arguments['--resize'])
+    DIR = arguments['--directory']
 
 if start_time.count(':') > 2 or end_time.count(':') > 2:
 	print("Please enter the times in the correct time format.")
@@ -10,22 +30,26 @@ if start_time.count(':') > 2 or end_time.count(':') > 2:
 start_time = start_time.split(':')
 end_time = end_time.split(':')
 
-def gif_convert(name, start_time, end_time):
+def gif_convert(video_name, gif_name, resize_factor, start_time, end_time):
 	start_float = float(start_time[0]) * 60 + float(str(start_time[1]+'.'+start_time[2]))
 	end_float = float(end_time[0]) * 60 + float(str(end_time[1]+'.'+end_time[2]))
 
-	VideoFileClip("./%s" % name).\
-              subclip(start_float,end_float).\
-              resize(0.3).\
-              to_gif("surprise.gif")
+	editor.VideoFileClip(DIR + video_name).\
+		              subclip(start_float,end_float).\
+		              resize(resize_factor).\
+		              to_gif(DIR + gif_name)
 
-gif_convert(gif_name, start_time, end_time)
+gif_convert(video_name, gif_name, resize_factor, start_time, end_time)
 
-# kris_sven = VideoFileClip("./frozen_trailer.mp4").\
+# # adding cropping option
+# def gif_crop():
+# 	kris_sven = VideoFileClip("./frozen_trailer.mp4").\
 #                    subclip((1,13.4),(1,13.9)).\
 #                    resize(0.5).\
 #                    crop(x1=145,x2=400).\ # remove left-right borders
 #                    to_gif("kris_sven.gif")
+
+
 
 # anna_olaf = VideoFileClip("./frozen_trailer.mp4").\
 #               subclip(87.9,88.1).\

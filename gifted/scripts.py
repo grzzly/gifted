@@ -1,45 +1,13 @@
-"""
-Usage:
-  gifted.py new <video_name> <gif_name> <start_time> <end_time> [--resize=<factor>] [--directory=DIR]
-  gifted.py new <video_name> <gif_name> <start_time> <end_time> crop <x> <y> [--resize=<factor>] [--directory=DIR]
-
-Options:
-  -h --help     		Show this screen
-  --version     		Show version
-  --resize=<factor>  		Resizing factor [default: 0.3]
-  --directory=DIR  		Directory for input and output [default: /Users/TK/mycode/gifted_io/]
-"""
-
-from docopt import docopt
 from moviepy import editor
 
-if __name__ == '__main__':
-    arguments = docopt(__doc__)
-    print(arguments)
-    
-    video_name = arguments['<video_name>']
-    gif_name = arguments['<gif_name>']
-    start_time = arguments['<start_time>']
-    end_time = arguments['<end_time>']
-    resize_factor = float(arguments['--resize'])
-    DIR = arguments['--directory']
-
-if start_time.count(':') > 2 or end_time.count(':') > 2:
-	print("Please enter the times in the correct time format.")
-
-start_time = start_time.split(':')
-end_time = end_time.split(':')
-
-def gif_convert(video_name, gif_name, resize_factor, start_time, end_time):
+def gif_convert(video_name, gif_name, resize_factor, start_time, end_time, directory):
 	start_float = float(start_time[0]) * 60 + float(str(start_time[1]+'.'+start_time[2]))
 	end_float = float(end_time[0]) * 60 + float(str(end_time[1]+'.'+end_time[2]))
 
-	editor.VideoFileClip(DIR + video_name).\
+	editor.VideoFileClip(directory + video_name).\
 		              subclip(start_float,end_float).\
 		              resize(resize_factor).\
-		              to_gif(DIR + gif_name)
-
-gif_convert(video_name, gif_name, resize_factor, start_time, end_time)
+		              to_gif(directory + gif_name)
 
 # # adding cropping option
 # def gif_crop():

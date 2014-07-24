@@ -1,8 +1,7 @@
 usage = \
 """
 Usage:
-  gifted.py new <video_name> <gif_name> <start_time> <end_time> [--resize=<factor>] [--directory=DIR]
-  gifted.py new <video_name> <gif_name> <start_time> <end_time> crop <left> <right> <top> <bottom> [--resize=<factor>] [--directory=DIR]
+  gifted.py <video_name> <gif_name> <start_time> <end_time> [crop] [--resize=<factor>] [--directory=DIR]
 
 Options:
   -h --help     		Show this screen

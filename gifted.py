@@ -11,14 +11,19 @@ class Gif_Create:
 		self.end_time = arguments['<end_time>']
 		self.resize_factor = float(arguments['--resize'])
 		self.directory = arguments['--directory']
-		self.crop_x1 = arguments['<left>']
-		self.crop_x2 = arguments['<right>']
-		self.crop_y1 = arguments['<top>']
-		self.crop_y2 = arguments['<bottom>']
-		self.new = arguments['new']
 		self.crop = arguments['crop']
 		
+		self.get_detail_input(arguments)
 		self.check_input()
+
+	def get_detail_input(self, arguments):
+		if arguments['crop']:
+			coordinates = raw_input("Cropping Parameters [x1,x2,y1,y2]: ")
+			coordinates = coordinates.split(',')
+			self.crop_x1 = coordinates[0]
+			self.crop_x2 = coordinates[1]
+			self.crop_y1 = coordinates[2]
+			self.crop_y2 = coordinates[3]
 
 	def check_input(self):
 		if self.check_time(self.start_time) and self.check_time(self.end_time):
@@ -51,7 +56,7 @@ class Gif_Create:
 		correct_time = re.match(r'\d\d:\d\d:\d\d', time)
 		return correct_time
 
-	def new_default(self):
+	def gif_default(self):
 		scripts.gif_convert(self.video_name, \
 							self.gif_name, \
 							self.resize_factor, \
@@ -59,7 +64,7 @@ class Gif_Create:
 							self.end_time, \
 							self.directory)
 
-	def new_crop(self):
+	def gif_crop(self):
 		scripts.gif_crop(self.video_name, \
 							self.gif_name, \
 							self.resize_factor, \
@@ -72,10 +77,10 @@ class Gif_Create:
 							self.crop_y2)
 
 	def main(self):
-		if self.new and not(self.crop):
-			self.new_default()
-		elif self.new and self.crop:
-			self.new_crop()
+		if self.crop:
+			self.gif_crop()
+		else:
+			self.gif_default()
 
 if __name__ == '__main__':
     arguments = docopt(commandline.usage)

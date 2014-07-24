@@ -1,23 +1,39 @@
 from moviepy import editor
 
+# converts raw time input to VideoFileClip compatible
+def time_convert(time):
+    time_converted = float(time[0]) * 60 + float(str(time[1]+'.'+time[2]))
+    return time_converted
+
+# basic gif conversion
 def gif_convert(video_name, gif_name, resize_factor, start_time, end_time, directory):
-	start_float = float(start_time[0]) * 60 + float(str(start_time[1]+'.'+start_time[2]))
-	end_float = float(end_time[0]) * 60 + float(str(end_time[1]+'.'+end_time[2]))
+	start_float = time_convert(start_time)
+	end_float = time_convert(end_time)
 
 	editor.VideoFileClip(directory + video_name).\
-		              subclip(start_float,end_float).\
-		              resize(resize_factor).\
-		              to_gif(directory + gif_name)
+                    subclip(start_float, end_float).\
+                    resize(resize_factor).\
+                    crop(x1=145,x2=400).\
+                    to_gif(directory + gif_name)
 
-# # adding cropping option
-# def gif_crop():
-# 	kris_sven = VideoFileClip("./frozen_trailer.mp4").\
-#                    subclip((1,13.4),(1,13.9)).\
-#                    resize(0.5).\
-#                    crop(x1=145,x2=400).\ # remove left-right borders
-#                    to_gif("kris_sven.gif")
+# adding cropping option
+def gif_crop(video_name, gif_name, resize_factor, start_time, end_time, directory, crop_x1, crop_x2, crop_y1, crop_y2):
+    start_float = time_convert(start_time)
+    end_float = time_convert(end_time)
 
+    first_clip = editor.VideoFileClip(directory + video_name).\
+                    subclip(start_float, end_float).\
+                    resize(resize_factor)
 
+    # make sure to accept 0 0 coordinates
+    if int(crop_x2) == 0:
+        crop_x2 = first_clip.w
+    if int(crop_y2) == 0:
+        crop_y2 = first_clip.h
+
+    if int(crop_x1) < first_clip.w and int(crop_y1) < first_clip.h:
+        first_clip.crop(x1=crop_x1,x2=crop_x2,y1=crop_y1,y2=crop_y2).\
+            to_gif(directory + gif_name)
 
 # anna_olaf = VideoFileClip("./frozen_trailer.mp4").\
 #               subclip(87.9,88.1).\

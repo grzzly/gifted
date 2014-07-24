@@ -34,6 +34,9 @@ def gif_crop(video_name, gif_name, resize_factor, start_time, end_time, director
     if int(crop_x1) < first_clip.w and int(crop_y1) < first_clip.h:
         first_clip.crop(x1=crop_x1,x2=crop_x2,y1=crop_y1,y2=crop_y2).\
             to_gif(directory + gif_name)
+    else:
+        print 'The coordinates you have put in do not match the video source.'
+        raise SystemExit
 
 # anna_olaf = VideoFileClip("./frozen_trailer.mp4").\
 #               subclip(87.9,88.1).\
